@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Service</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script>
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function submitRequest() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const service = document.getElementById("service").value;
+            const message = document.getElementById("message").value;
+
+            database.ref('serviceRequests').push({
+                name: name,
+                email: email,
+                service: service,
+                message: message,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                alert("Request submitted successfully!");
+                document.getElementById("request-form").reset();
+            }).catch(error => {
+                alert("Error: " + error.message);
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Request a Service</h1>
+    </header>
+    <section>
+        <form id="request-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            
+            <label for="service">Service Required:</label>
+            <input type="text" id="service" required>
+            
+            <label for="message">Phone Number:</label>
+            <textarea id="message" required></textarea>
+            
+            <button type="button" onclick="submitRequest()">Submit Request</button>
+        </form>
+    </section>
+</body>
+</html>
